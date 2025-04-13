@@ -1,18 +1,20 @@
-import { NextAuthOptions } from 'next-auth';
-import Credentials from 'next-auth/providers/credentials';
-import { cookies } from 'next/headers';
+import { NextAuthOptions } from "next-auth";
+import Credentials from "next-auth/providers/credentials";
+import GoogleProvider from "next-auth/providers/google";
+import { cookies } from "next/headers";
+import { jwtDecode } from "jwt-decode";
 
-import { userLogin, getMe, userGoogleLogin } from './api';
+import { userLogin, getMe, userGoogleLogin } from "./api";
 
-import { AUTH_COOKIE } from '@/common/contants';
+import { AUTH_COOKIE } from "@/common/contants";
 
 export const authOptions: NextAuthOptions = {
   session: {
-    strategy: 'jwt',
+    strategy: "jwt",
     maxAge: 10 * 60 * 60, // 10 hours
   },
   pages: {
-    signIn: '/login',
+    signIn: "/login",
   },
   secret: process.env.NEXTAUTH_SECRET,
   providers: [
@@ -24,10 +26,10 @@ export const authOptions: NextAuthOptions = {
       async authorize(credentials) {
         const result = await userLogin(
           credentials!.email,
-          credentials!.password
+          credentials!.password,
         );
 
-        const token = result.cookie?.split(';')[0].split('=')[1];
+        const token = result.cookie?.split(";")[0].split("=")[1];
 
         if (token) {
           (await cookies()).set({
@@ -62,20 +64,20 @@ export const authOptions: NextAuthOptions = {
       },
       authorization: {
         params: {
-          prompt: 'consent',
-          access_type: 'offline',
-          response_type: 'code',
-          redirect_uri: process.env.NEXTAUTH_URL + '/api/auth/callback/google',
+          prompt: "consent",
+          access_type: "offline",
+          response_type: "code",
+          redirect_uri: process.env.NEXTAUTH_URL + "/api/auth/callback/google",
         },
       },
     }),
   ],
   callbacks: {
     async jwt({ account, token, user, trigger, session }) {
-      if (account?.provider == 'google') {
+      if (account?.provider == "google") {
         const result = await userGoogleLogin(account.id_token!);
 
-        const cookieToken = result.cookie?.split(';')[0].split('=')[1];
+        const cookieToken = result.cookie?.split(";")[0].split("=")[1];
 
         // set backend jwt to cookies
         if (cookieToken) {
@@ -97,7 +99,7 @@ export const authOptions: NextAuthOptions = {
           token.name = user.data.username;
           token.createdAt = user.data.createdAt;
         }
-      } else if (account?.provider === 'credentials') {
+      } else if (account?.provider === "credentials") {
         //login with credentials
         token.email = user.email!;
         token.id = user.id!;
@@ -106,7 +108,7 @@ export const authOptions: NextAuthOptions = {
         token.createdAt = user.createdAt!;
       }
 
-      if (trigger === 'update') {
+      if (trigger === "update") {
         token.image = session.image!;
         token.name = session.name!;
       }
@@ -122,7 +124,7 @@ export const authOptions: NextAuthOptions = {
         session.user.createdAt = token.createdAt;
       }
 
-      if (trigger === 'update') {
+      if (trigger === "update") {
         session.user.name = token.name;
         session.user.image = token.image;
       }
