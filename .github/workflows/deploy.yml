@@ -30,7 +30,7 @@ jobs:
           NEXT_PUBLIC_BACKEND_URL: ${{ secrets.NEXT_PUBLIC_BACKEND_URL }}
 
       - name: Install Vercel CLI
-        run: npm install -g vercel
+        run: npm install -g vercel --legacy-peer-deps
 
       - name: Deploy to Vercel
         run: vercel --prod --yes --token ${{ secrets.VERCEL_TOKEN }}
