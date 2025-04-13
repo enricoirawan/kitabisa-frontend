@@ -1,8 +1,6 @@
 import { NextAuthOptions } from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import GoogleProvider from "next-auth/providers/google";
-import { cookies } from "next/headers";
-import { jwtDecode } from "jwt-decode";
 
 import { userLogin, getMe, userGoogleLogin } from "./api";
 
@@ -17,31 +15,36 @@ export const authOptions: NextAuthOptions = {
     signIn: "/login",
   },
   secret: process.env.NEXTAUTH_SECRET,
+  // ✅ Pengaturan Cookie Global (Aman & Konsisten)
+  cookies: {
+    sessionToken: {
+      name: AUTH_COOKIE,
+      options: {
+        httpOnly: true, // Anti-XSS
+        secure: process.env.NODE_ENV === "production", // HTTPS only
+        sameSite: "lax", // Anti-CSRF
+        domain: "ricoenn.com", // Untuk semua subdomain
+        path: "/",
+        maxAge: 10 * 60 * 60, // 10 jam
+      },
+    },
+  },
   providers: [
+    // 🔑 Credentials Provider (Email & Password)
     Credentials({
       credentials: {
         email: {},
         password: {},
       },
       async authorize(credentials) {
-        const result = await userLogin(
-          credentials!.email,
-          credentials!.password,
-        );
+        try {
+          const result = await userLogin(
+            credentials!.email,
+            credentials!.password,
+          );
 
-        const token = result.cookie?.split(";")[0].split("=")[1];
+          if (!result.response) return null;
 
-        if (token) {
-          (await cookies()).set({
-            name: AUTH_COOKIE,
-            value: token,
-            secure: true,
-            httpOnly: true,
-            expires: new Date(jwtDecode(token!).exp! * 1000),
-          });
-        }
-
-        if (result.response) {
           const user = await getMe(result.cookie!);
 
           return {
@@ -50,12 +53,17 @@ export const authOptions: NextAuthOptions = {
             image: user.data.photoProfileUrl,
             name: user.data.username,
             createdAt: user.data.createdAt,
+            // Simpan token di user object untuk digunakan di JWT callback
+            accessToken: result.cookie?.split(";")[0].split("=")[1],
           };
-        }
+        } catch (error) {
+          console.error("Login error:", error);
 
-        return null;
+          return null;
+        }
       },
     }),
+    // 🌐 Google Provider
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID!,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
@@ -73,63 +81,56 @@ export const authOptions: NextAuthOptions = {
     }),
   ],
   callbacks: {
-    async jwt({ account, token, user, trigger, session }) {
-      if (account?.provider == "google") {
-        const result = await userGoogleLogin(account.id_token!);
+    // 🔄 JWT Callback (Simpan Token & Data User)
+    async jwt({ token, user, account, trigger, session }) {
+      // 1. Handle Google Login
+      if (account?.provider === "google") {
+        try {
+          const result = await userGoogleLogin(account.id_token!);
+          const accessToken = result.cookie?.split(";")[0].split("=")[1];
 
-        const cookieToken = result.cookie?.split(";")[0].split("=")[1];
+          if (result.response) {
+            const userData = await getMe(result.cookie!);
 
-        // set backend jwt to cookies
-        if (cookieToken) {
-          (await cookies()).set({
-            name: AUTH_COOKIE,
-            value: cookieToken,
-            secure: true,
-            httpOnly: true,
-            expires: new Date(jwtDecode(cookieToken!).exp! * 1000),
-            sameSite: "lax",
-            domain: ".ricoenn.com",
-            path: "/",
-          });
+            token.accessToken = accessToken;
+            token.email = userData.data.email;
+            token.id = userData.data.id.toString();
+            token.image = userData.data.photoProfileUrl;
+            token.name = userData.data.username;
+            token.createdAt = userData.data.createdAt;
+          }
+        } catch (error) {
+          console.error("Google login error:", error);
         }
-
-        if (result.response) {
-          const user = await getMe(result.cookie!);
-
-          token.email = user.data.email;
-          token.id = user.data.id.toString();
-          token.image = user.data.photoProfileUrl;
-          token.name = user.data.username;
-          token.createdAt = user.data.createdAt;
-        }
-      } else if (account?.provider === "credentials") {
-        //login with credentials
-        token.email = user.email!;
-        token.id = user.id!;
-        token.image = user.image!;
-        token.name = user.name!;
-        token.createdAt = user.createdAt!;
+      }
+      // 2. Handle Credentials Login
+      else if (user?.accessToken) {
+        token.accessToken = user.accessToken;
+        token.email = user.email;
+        token.id = user.id;
+        token.image = user.image;
+        token.name = user.name;
+        token.createdAt = user.createdAt;
       }
 
+      // 3. Handle Session Update (jika diperlukan)
       if (trigger === "update") {
-        token.image = session.image!;
-        token.name = session.name!;
+        token.name = session.user.name;
+        token.image = session.user.image;
       }
 
       return token;
     },
-    async session({ session, token, trigger }) {
-      if (session && session.user) {
+    // 🏛️ Session Callback (Kirim Data ke Client)
+    async session({ session, token }) {
+      if (session.user) {
         session.user.id = token.id;
         session.user.email = token.email;
         session.user.image = token.image;
         session.user.name = token.name;
         session.user.createdAt = token.createdAt;
-      }
-
-      if (trigger === "update") {
-        session.user.name = token.name;
-        session.user.image = token.image;
+        // (Opsional) Akses token untuk keperluan API calls
+        session.accessToken = token.accessToken;
       }
 
       return session;
