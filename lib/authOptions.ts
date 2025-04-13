@@ -23,7 +23,7 @@ export const authOptions: NextAuthOptions = {
         httpOnly: true, // Anti-XSS
         secure: process.env.NODE_ENV === "production", // HTTPS only
         sameSite: "lax", // Anti-CSRF
-        domain: "ricoenn.com", // Untuk semua subdomain
+        domain: ".ricoenn.com", // Untuk semua subdomain
         path: "/",
         maxAge: 10 * 60 * 60, // 10 jam
       },
