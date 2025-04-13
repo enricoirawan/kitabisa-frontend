@@ -12,15 +12,28 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      - name: Clean cache
+        run: |
+          npm cache clean --force
+          rm -rf node_modules
+          rm -f package-lock.json
+
       - name: Install Node.js
         uses: actions/setup-node@v3
         with:
           node-version: 18
+          cache: 'npm'
 
-      - name: Install dependencies
-        run: npm install --legacy-peer-deps
+      - name: Install dependencies with legacy peer deps
+        run: npm ci --legacy-peer-deps
+        env:
+          NEXTAUTH_URL: ${{ secrets.NEXTAUTH_URL }}
+          GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
+          GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
+          NEXTAUTH_SECRET: ${{ secrets.NEXTAUTH_SECRET }}
+          NEXT_PUBLIC_BACKEND_URL: ${{ secrets.NEXT_PUBLIC_BACKEND_URL }}
 
-      - name: Build project with env vars
+      - name: Build project
         run: npm run build
         env:
           NEXTAUTH_URL: ${{ secrets.NEXTAUTH_URL }}
@@ -30,7 +43,7 @@ jobs:
           NEXT_PUBLIC_BACKEND_URL: ${{ secrets.NEXT_PUBLIC_BACKEND_URL }}
 
       - name: Install Vercel CLI
-        run: npm install -g vercel --legacy-peer-deps
+        run: npm install -g vercel@latest --force
 
       - name: Deploy to Vercel
         run: vercel --prod --yes --token ${{ secrets.VERCEL_TOKEN }}
