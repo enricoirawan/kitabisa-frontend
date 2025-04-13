@@ -87,6 +87,9 @@ export const authOptions: NextAuthOptions = {
             secure: true,
             httpOnly: true,
             expires: new Date(jwtDecode(cookieToken!).exp! * 1000),
+            sameSite: "lax",
+            domain: ".ricoenn.com",
+            path: "/",
           });
         }
 

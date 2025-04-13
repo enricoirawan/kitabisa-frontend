@@ -171,7 +171,6 @@ export async function createCampaign(formData: FormData) {
 export async function getNewestCampaigns(): Promise<BaseResponse<Campaign[]>> {
   const response = await fetch(NEWEST_CAMPAIGNS, {
     method: "GET",
-    credentials: "include",
   });
 
   const parsedResponse = await response.json();
