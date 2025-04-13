@@ -54,7 +54,7 @@ export const authOptions: NextAuthOptions = {
             name: user.data.username,
             createdAt: user.data.createdAt,
             // Simpan token di user object untuk digunakan di JWT callback
-            accessToken: result.cookie?.split(";")[0].split("=")[1],
+            accessToken: result.cookie?.split(";")[0].split("=")[1] ?? "",
           };
         } catch (error) {
           console.error("Login error:", error);
@@ -92,7 +92,7 @@ export const authOptions: NextAuthOptions = {
           if (result.response) {
             const userData = await getMe(result.cookie!);
 
-            token.accessToken = accessToken;
+            token.accessToken = accessToken ?? "";
             token.email = userData.data.email;
             token.id = userData.data.id.toString();
             token.image = userData.data.photoProfileUrl;
@@ -130,7 +130,7 @@ export const authOptions: NextAuthOptions = {
         session.user.name = token.name;
         session.user.createdAt = token.createdAt;
         // (Opsional) Akses token untuk keperluan API calls
-        session.accessToken = token.accessToken;
+        session.user.accessToken = token.accessToken;
       }
 
       return session;

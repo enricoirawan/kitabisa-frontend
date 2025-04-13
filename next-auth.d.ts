@@ -10,6 +10,7 @@ declare module "next-auth" {
       /** The user's postal address. */
       createdAt: string;
       id: string;
+      accessToken: string;
     } & DefaultSession["user"];
   }
 
@@ -31,5 +32,6 @@ declare module "next-auth/jwt" {
     email: string;
     image: string;
     createdAt: string;
+    accessToken: string;
   }
 }
