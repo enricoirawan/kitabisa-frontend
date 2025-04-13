@@ -1,32 +1,31 @@
-import Image from "next/image";
-import { getServerSession } from "next-auth";
-import { Metadata } from "next";
+import Image from 'next/image';
+import { getServerSession } from 'next-auth';
+import { Metadata } from 'next';
 
-import { authOptions } from "../api/auth/[...nextauth]/route";
-
-import logo_active from "@/public/icons/logo_active.svg";
-import love_list_active from "@/public/icons/love_list_active.svg";
-import image_11 from "@/public/icons/image_11.svg";
-import zakat from "@/public/icons/zakat.svg";
-import donasi from "@/public/icons/donasi.svg";
-import saling_bantu from "@/public/icons/saling_bantu.svg";
-import kurban from "@/public/icons/kurban.svg";
-import create_donation from "@/public/images/create_donation.png";
-import HomeMenuItem from "@/components/home/home-menu-item";
-import HomeCarouselBanner from "@/components/home/home-carousel-banner";
-import CreateCampaignButton from "@/components/home/create-campaign-button";
-import GoToLoginButton from "@/components/home/go-to-login-button";
-import HomeCampaignList from "@/components/home/home-campaign-list";
-import HomeCategoryList from "@/components/home/home-category-list";
-import GoToCampaignsButton from "@/components/go-to-campaigns-button";
-import SearchBar from "@/components/home/search-bar";
-import NewestDonation from "@/components/home/newest-donation";
-import DonationCount from "@/components/home/donation-count";
+import logo_active from '@/public/icons/logo_active.svg';
+import love_list_active from '@/public/icons/love_list_active.svg';
+import image_11 from '@/public/icons/image_11.svg';
+import zakat from '@/public/icons/zakat.svg';
+import donasi from '@/public/icons/donasi.svg';
+import saling_bantu from '@/public/icons/saling_bantu.svg';
+import kurban from '@/public/icons/kurban.svg';
+import create_donation from '@/public/images/create_donation.png';
+import HomeMenuItem from '@/components/home/home-menu-item';
+import HomeCarouselBanner from '@/components/home/home-carousel-banner';
+import CreateCampaignButton from '@/components/home/create-campaign-button';
+import GoToLoginButton from '@/components/home/go-to-login-button';
+import HomeCampaignList from '@/components/home/home-campaign-list';
+import HomeCategoryList from '@/components/home/home-category-list';
+import GoToCampaignsButton from '@/components/go-to-campaigns-button';
+import SearchBar from '@/components/home/search-bar';
+import NewestDonation from '@/components/home/newest-donation';
+import DonationCount from '@/components/home/donation-count';
+import { authOptions } from '@/lib/authOptions';
 
 export async function generateMetadata(): Promise<Metadata> {
   return {
-    title: "Home",
-    description: "Donasi kapanpun dan dimanapun. Kita Bisa Kok!",
+    title: 'Home',
+    description: 'Donasi kapanpun dan dimanapun. Kita Bisa Kok!',
   };
 }
 
@@ -125,7 +124,7 @@ export default async function Home() {
       <section className="">
         <div className="flex items-center justify-between mb-4 px-2">
           <p className="font-bold text-black text-lg">
-            Doa-doa{" "}
+            Doa-doa{' '}
             <span className="text-curelean-50 font-semibold">#OrangBaik</span>
           </p>
           <p className="font-bold text-sm text-curelean-50">Lainnya</p>

@@ -1,10 +1,10 @@
-import { getServerSession } from "next-auth";
+import { getServerSession } from 'next-auth';
 
-import Divider from "@/components/divider";
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
-import { formatDateForView } from "@/common/utils";
-import DonationCount from "@/components/my-donations/donation-count";
-import DonationList from "@/components/my-donations/donation-list";
+import Divider from '@/components/divider';
+import { formatDateForView } from '@/common/utils';
+import DonationCount from '@/components/my-donations/donation-count';
+import DonationList from '@/components/my-donations/donation-list';
+import { authOptions } from '@/lib/authOptions';
 
 const MyDonations = async () => {
   const session = await getServerSession(authOptions);
@@ -21,8 +21,8 @@ const MyDonations = async () => {
               {session?.user.name}
             </p>
             <p className="text-neutral-100 text-xs">
-              Berbagi kebaikan di Kitabisa sejak{" "}
-              {formatDateForView(session?.user.createdAt ?? "")}
+              Berbagi kebaikan di Kitabisa sejak{' '}
+              {formatDateForView(session?.user.createdAt ?? '')}
             </p>
 
             <div className="h-[1px] bg-neutral-20 w-full my-2" />

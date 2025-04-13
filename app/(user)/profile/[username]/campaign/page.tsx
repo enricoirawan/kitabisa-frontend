@@ -1,12 +1,12 @@
-import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
-import { getServerSession } from "next-auth";
+import { dehydrate, HydrationBoundary } from '@tanstack/react-query';
+import { getServerSession } from 'next-auth';
 
-import { getQueryClient } from "@/app/query-provider";
-import { USER_CAMPAIGNS_KEY } from "@/common/contants";
-import HeaderWithBack from "@/components/header-with-back-button";
-import CampaignList from "@/components/user-campaign/campaign-list";
-import { getUserCampaigns } from "@/lib/api";
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import { getQueryClient } from '@/app/query-provider';
+import { USER_CAMPAIGNS_KEY } from '@/common/contants';
+import HeaderWithBack from '@/components/header-with-back-button';
+import CampaignList from '@/components/user-campaign/campaign-list';
+import { getUserCampaigns } from '@/lib/api';
+import { authOptions } from '@/lib/authOptions';
 
 export default async function UserCampaigns({
   params,
@@ -22,7 +22,7 @@ export default async function UserCampaigns({
 
   await queryClient.prefetchQuery({
     queryKey: [USER_CAMPAIGNS_KEY],
-    queryFn: () => getUserCampaigns({ username: username ?? "", pageParam: 1 }),
+    queryFn: () => getUserCampaigns({ username: username ?? '', pageParam: 1 }),
   });
 
   return (
@@ -30,7 +30,7 @@ export default async function UserCampaigns({
       <div className="w-full flex flex-col h-screen">
         <HeaderWithBack
           backTo="previous"
-          title={`Kampanye ${username === currentSessionUsername ? "Kamu" : username}`}
+          title={`Kampanye ${username === currentSessionUsername ? 'Kamu' : username}`}
         />
         <CampaignList />
       </div>
