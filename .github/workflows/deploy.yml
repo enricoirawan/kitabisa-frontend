@@ -44,7 +44,10 @@ jobs:
 
       - name: Install Vercel CLI
         run: npm install -g vercel@latest --force
-      
+
+      - name: Pull Vercel project settings
+        run: vercel pull --yes --environment=production --token ${{ secrets.VERCEL_TOKEN }}
+
       - name: Build project for Vercel
         run: vercel build
         env:
@@ -55,10 +58,4 @@ jobs:
           NEXT_PUBLIC_BACKEND_URL: ${{ secrets.NEXT_PUBLIC_BACKEND_URL }}
 
       - name: Deploy to Vercel
-        run: vercel --prod --yes --prebuilt --token ${{ secrets.VERCEL_TOKEN }}
-        env:
-          NEXTAUTH_URL: ${{ secrets.NEXTAUTH_URL }}
-          GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
-          GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
-          NEXTAUTH_SECRET: ${{ secrets.NEXTAUTH_SECRET }}
-          NEXT_PUBLIC_BACKEND_URL: ${{ secrets.NEXT_PUBLIC_BACKEND_URL }}
+        run: vercel deploy --prod --yes --prebuilt --token ${{ secrets.VERCEL_TOKEN }}
