@@ -49,8 +49,9 @@ jobs:
         run: vercel pull --yes --environment=production --token ${{ secrets.VERCEL_TOKEN }}
 
       - name: Build project for Vercel
-        run: vercel build --environment=production
+        run: vercel build
         env:
+          VERCEL_ENV: production
           NEXTAUTH_URL: ${{ secrets.NEXTAUTH_URL }}
           GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
           GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
