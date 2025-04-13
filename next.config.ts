@@ -6,6 +6,7 @@ const nextConfig: NextConfig = {
       "res.cloudinary.com",
       "lh3.googleusercontent.com",
       "api.dicebear.com",
+      "kitabisa.ricoenn.com",
     ],
   },
 };
