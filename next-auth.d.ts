@@ -20,7 +20,6 @@ declare module "next-auth" {
     email: string;
     image: string;
     createdAt: string;
-    accessToken: string;
   }
 }
 
