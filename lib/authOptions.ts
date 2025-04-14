@@ -35,11 +35,11 @@ export const authOptions: NextAuthOptions = {
           (await cookies()).set({
             name: AUTH_COOKIE,
             value: token,
-            secure: true,
+            secure: process.env.NODE_ENV === "production" ? true : false,
             httpOnly: true,
             expires: new Date(jwtDecode(token!).exp! * 1000),
             sameSite: "lax",
-            domain: ".ricoenn.com",
+            domain: process.env.DOMAIN_COOKIE,
             path: "/",
           });
         }
