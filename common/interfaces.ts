@@ -102,6 +102,16 @@ export interface SocketCampaignUpdated {
   amount: number;
 }
 
+export interface PaymentHistory {
+  id: number;
+  orderId: string;
+  nominal: number;
+  paymentStatus: string;
+  redirectURL: string;
+  messageText: string;
+  campaign: Pick<Campaign, "headline" | "slug" | "banner">;
+}
+
 //! ZUSTAND STATE
 export interface SortState {
   sort: "asc" | "desc";

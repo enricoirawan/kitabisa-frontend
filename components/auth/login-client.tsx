@@ -1,12 +1,12 @@
 "use client";
 
 import Image from "next/image";
-import React from "react";
+import React, { useEffect } from "react";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter, useSearchParams } from "next/navigation";
-import { signIn } from "next-auth/react";
+import { signIn, useSession } from "next-auth/react";
 
 import arrow_circle_left_active from "@/public/icons/arrow_circle_left_active.svg";
 import {
@@ -29,6 +29,7 @@ const formSchema = z.object({
 });
 
 const LoginClientPage = () => {
+  const session = useSession();
   const searchParams = useSearchParams();
   const callbackUrl = searchParams.get("callbackUrl");
   const router = useRouter();
@@ -47,14 +48,24 @@ const LoginClientPage = () => {
     const response = await signIn("credentials", {
       email: values.email,
       password: values.password,
-      redirect: true,
+      redirect: false,
       callbackUrl: callbackUrl ?? "/",
     });
+
+    if (response?.ok) {
+      router.replace("/");
+    }
 
     if (response?.error) {
       showErrorToast(response.error);
     }
   };
+
+  useEffect(() => {
+    if (session.data?.user) {
+      router.replace("/");
+    }
+  }, []);
 
   return (
     <>

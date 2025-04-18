@@ -12,6 +12,7 @@ export const NEWEST_CAMPAIGNS = BASE_URL + "/campaigns/newest";
 export const USER_CAMPAIGNS = BASE_URL + "/campaigns/user";
 export const CAMPAIGN_DETAIL = BASE_URL + "/campaigns/detail";
 export const PAYMENT = BASE_URL + "/payment";
+export const PAYMENT_HISTORY = BASE_URL + "/payment/history";
 export const DONATIONS = BASE_URL + "/donations";
 export const NEWEST_DONATIONS = BASE_URL + "/donations/newest";
 export const USER_DONATIONS = BASE_URL + "/donations/user";
@@ -28,6 +29,7 @@ export const CAMPAIGN_DONATIONS_KEY = "CAMPAIGN_DONATIONS_KEY";
 export const NEWEST_DONATION_KEY = "NEWEST_DONATION_KEY";
 export const USER_DONATIONS_KEY = "USER_DONATIONS_KEY";
 export const NOTIFICATION_KEY = "NOTIFICATION_KEY";
+export const PAYMENT_HISTORY_KEY = "PAYMENT_HISTORY_KEY";
 
 // MUTATION KEY
 export const CREATE_CAMPAIGN_KEY = "CREATE_CAMPAIGN";

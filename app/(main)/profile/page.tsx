@@ -1,14 +1,13 @@
-import { getServerSession } from 'next-auth';
-import Image from 'next/image';
+import { getServerSession } from "next-auth";
+import Image from "next/image";
 
-import LogoutButton from '@/components/profile/logout-button';
-import EditProfileButton from '@/components/profile/edit-profile-button';
-import { authOptions } from '@/lib/authOptions';
+import LogoutButton from "@/components/profile/logout-button";
+import EditProfileButton from "@/components/profile/edit-profile-button";
+import { authOptions } from "@/lib/authOptions";
+import HistoryTransactionButton from "@/components/profile/history-transaction";
 
 const ProfilePage = async () => {
   const session = await getServerSession(authOptions);
-
-  console.log(JSON.stringify(session?.user));
 
   return (
     <div className="w-full flex flex-col h-screen">
@@ -24,7 +23,7 @@ const ProfilePage = async () => {
           alt="photo_profile"
           className="w-12 h-12 rounded-full"
           height={0}
-          src={session?.user.image ?? ''}
+          src={session?.user.image ?? ""}
           unoptimized={true}
           width={0}
         />
@@ -38,6 +37,11 @@ const ProfilePage = async () => {
 
       {/* Menus */}
       <section className="flex flex-col">
+        {/* History Transaction */}
+        <HistoryTransactionButton />
+        <div className="mt-2 ml-4 border-b border-solid border-neutral-10" />
+        {/* History Transaction */}
+
         {/* Edit Profile */}
         <EditProfileButton />
         <div className="mt-2 ml-4 border-b border-solid border-neutral-10" />

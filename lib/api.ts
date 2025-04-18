@@ -15,6 +15,7 @@ import {
   USER_DONATIONS,
   NOTIFICATION,
   EDIT_PROFILE,
+  PAYMENT_HISTORY,
 } from "@/common/contants";
 import {
   BaseResponse,
@@ -23,6 +24,7 @@ import {
   Donation,
   Notification,
   Pagination,
+  PaymentHistory,
   PaymentResult,
   UpdateNotification,
   User,
@@ -395,6 +397,26 @@ export async function editProfile(formData: FormData) {
   const response = await fetch(EDIT_PROFILE, {
     method: "PATCH",
     body: formData,
+    credentials: "include",
+  });
+
+  const parsedResponse = await response.json();
+
+  if (!response.ok) {
+    throw new Error(parsedResponse.message);
+  }
+
+  return parsedResponse;
+}
+
+export async function getPaymentHistory(): Promise<
+  BaseResponse<PaymentHistory[]>
+> {
+  const response = await fetch(PAYMENT_HISTORY, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
     credentials: "include",
   });
 

@@ -76,6 +76,15 @@ export const authOptions: NextAuthOptions = {
     }),
   ],
   callbacks: {
+    async signIn({ user, account }) {
+      if (account?.provider === "credentials" && !user) {
+      }
+      if (account?.provider === "google" && !user) {
+        return false;
+      }
+
+      return true;
+    },
     async jwt({ account, token, user, trigger, session }) {
       if (account?.provider == "google") {
         const result = await userGoogleLogin(account.id_token!);

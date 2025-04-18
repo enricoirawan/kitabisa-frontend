@@ -71,9 +71,7 @@ const DonateView = ({ initialData }: DonateViewProps) => {
         const paymentResult = response.data;
 
         setStatus("loading_redirect");
-        setTimeout(() => {
-          window.location.href = paymentResult.redirectURL;
-        }, 2000);
+        window.location.href = paymentResult.redirectURL;
       } else {
         throw new Error(response.message);
       }
