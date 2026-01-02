@@ -59,7 +59,7 @@ To run this project, you will need to add the following environment variables to
 `NEXT_PUBLIC_BACKEND_URL`
 
 `DOMAIN_COOKIE`
-## Frontend Repo
+## Backend Repo
 https://github.com/enricoirawan/kitabisa-backend
 
 ![Screenshot App](screenshot.png)
