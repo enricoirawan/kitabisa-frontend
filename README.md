@@ -1,36 +1,65 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
-## Getting Started
+# KitaBisa.com Frontend Clone App
+The KitaBisa.com Backend Clone App is a crowdfunding application that allows users to create fundraising campaigns and collect donations from a wide range of contributors.
 
-First, run the development server:
+This application provides a backend system to manage user authentication, campaign creation, and donation processing securely and efficiently.
+
+
+## Features
+User registration,
+Email-based login,
+Google account authentication,
+Create and manage campaigns &
+Donate to campaigns
+
+## Backend Tech Stack
+NextJs – Backend framework
+
+NextAuth & HttpOnly Cookies
+
+WebSocket - real-time communication
+
+React Query - server-state management
+
+Zustand - client-state management
+
+React Hook Form with Zod - form validation
+
+ShadCN UI and Tailwind CSS - UI styling
+## How to run project locally
+
+To run kitabisa-backend project with npm
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+  git clone https://github.com/enricoirawan/kitabisa-frontend
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+then install 
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+  npm install
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+run the project on development enviroment
+```bash
+  npm run dev
+```
+## Environment Variables
 
-## Learn More
+To run this project, you will need to add the following environment variables to your .env file
 
-To learn more about Next.js, take a look at the following resources:
+`NEXTAUTH_URL`
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+`GOOGLE_CLIENT_ID`
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+`GOOGLE_CLIENT_SECRET`
 
-## Deploy on Vercel
+`NEXTAUTH_SECRET`
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+`NEXT_PUBLIC_BACKEND_URL`
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+`DOMAIN_COOKIE`
+## Frontend Repo
+https://github.com/enricoirawan/kitabisa-backend
+
+![Screenshot App](screenshot.png)
