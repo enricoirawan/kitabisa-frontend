@@ -16,7 +16,7 @@ import {
   NOTIFICATION,
   EDIT_PROFILE,
   PAYMENT_HISTORY,
-} from "@/common/contants";
+} from '@/common/contants';
 import {
   BaseResponse,
   Campaign,
@@ -29,7 +29,7 @@ import {
   UpdateNotification,
   User,
   UserDonations,
-} from "@/common/interfaces";
+} from '@/common/interfaces';
 
 export async function userRegister(data: {
   username: string;
@@ -37,9 +37,9 @@ export async function userRegister(data: {
   password: string;
 }) {
   const response = await fetch(REGISTER, {
-    method: "POST",
+    method: 'POST',
     headers: {
-      "Content-Type": "application/json",
+      'Content-Type': 'application/json',
     },
     body: JSON.stringify({
       username: data.username,
@@ -59,16 +59,16 @@ export async function userRegister(data: {
 
 export async function userLogin(email: string, password: string) {
   const response = await fetch(LOGIN, {
-    method: "POST",
+    method: 'POST',
     headers: {
-      "Content-Type": "application/json",
+      'Content-Type': 'application/json',
     },
     body: JSON.stringify({
       email: email,
       password: password,
     }),
   });
-  const authCookie = response.headers.get("Set-Cookie");
+  const authCookie = response.headers.get('Set-Cookie');
   const parseResponse = await response.json();
 
   if (!response.ok) {
@@ -83,15 +83,15 @@ export async function userLogin(email: string, password: string) {
 
 export async function userGoogleLogin(idToken: string) {
   const response = await fetch(GOOGLE_LOGIN, {
-    method: "POST",
+    method: 'POST',
     headers: {
-      "Content-Type": "application/json",
+      'Content-Type': 'application/json',
     },
     body: JSON.stringify({
       token: idToken,
     }),
   });
-  const authCookie = response.headers.get("Set-Cookie");
+  const authCookie = response.headers.get('Set-Cookie');
   const parseResponse = await response.json();
 
   if (!response.ok) {
@@ -106,9 +106,9 @@ export async function userGoogleLogin(idToken: string) {
 
 export async function getMe(cookie: string): Promise<BaseResponse<User>> {
   const response = await fetch(ME, {
-    method: "GET",
+    method: 'GET',
     headers: {
-      "Content-Type": "application/json",
+      'Content-Type': 'application/json',
       Cookie: cookie,
     },
   });
@@ -124,11 +124,11 @@ export async function getMe(cookie: string): Promise<BaseResponse<User>> {
 
 export async function getMeAfterUpdateProfile(): Promise<BaseResponse<User>> {
   const response = await fetch(ME, {
-    method: "GET",
+    method: 'GET',
     headers: {
-      "Content-Type": "application/json",
+      'Content-Type': 'application/json',
     },
-    credentials: "include",
+    credentials: 'include',
   });
 
   const parsedResponse = await response.json();
@@ -142,7 +142,7 @@ export async function getMeAfterUpdateProfile(): Promise<BaseResponse<User>> {
 
 export async function getCategories(): Promise<BaseResponse<Category[]>> {
   const response = await fetch(CATEGORIES, {
-    method: "GET",
+    method: 'GET',
   });
 
   const parsedResponse = await response.json();
@@ -156,9 +156,9 @@ export async function getCategories(): Promise<BaseResponse<Category[]>> {
 
 export async function createCampaign(formData: FormData) {
   const response = await fetch(CREATE_CAMPAIGN, {
-    method: "POST",
+    method: 'POST',
     body: formData,
-    credentials: "include",
+    credentials: 'include',
   });
 
   const parsedResponse = await response.json();
@@ -172,7 +172,7 @@ export async function createCampaign(formData: FormData) {
 
 export async function getNewestCampaigns(): Promise<BaseResponse<Campaign[]>> {
   const response = await fetch(NEWEST_CAMPAIGNS, {
-    method: "GET",
+    method: 'GET',
   });
 
   const parsedResponse = await response.json();
@@ -187,27 +187,27 @@ export async function getNewestCampaigns(): Promise<BaseResponse<Campaign[]>> {
 export async function getCampaigns({
   pageParam = 1,
   categoryId,
-  sort = "desc",
+  sort = 'desc',
 }: {
   pageParam: number;
   categoryId: number | undefined;
-  sort: "asc" | "desc";
+  sort: 'asc' | 'desc';
 }): Promise<BaseResponse<Pagination<Campaign>>> {
   const url = new URL(CAMPAIGNS);
 
-  url.searchParams.append("page", pageParam.toString());
+  url.searchParams.append('page', pageParam.toString());
 
   if (categoryId) {
-    url.searchParams.append("categoryId", categoryId.toString());
+    url.searchParams.append('categoryId', categoryId.toString());
   }
 
   if (sort) {
-    url.searchParams.append("sort", sort);
+    url.searchParams.append('sort', sort);
   }
 
   const response = await fetch(url, {
-    method: "GET",
-    credentials: "include",
+    method: 'GET',
+    credentials: 'include',
   });
 
   const parsedResponse = await response.json();
@@ -229,9 +229,9 @@ export async function getUserCampaigns({
   const response = await fetch(
     `${USER_CAMPAIGNS}/${username}?page=${pageParam}`,
     {
-      method: "GET",
-      credentials: "include",
-    },
+      method: 'GET',
+      credentials: 'include',
+    }
   );
 
   const parsedResponse = await response.json();
@@ -244,11 +244,11 @@ export async function getUserCampaigns({
 }
 
 export async function getCampaignDetail(
-  slug: string,
+  slug: string
 ): Promise<BaseResponse<Campaign>> {
   const response = await fetch(`${CAMPAIGN_DETAIL}/${slug}`, {
-    method: "GET",
-    credentials: "include",
+    method: 'GET',
+    credentials: 'include',
     next: {
       revalidate: 300,
     },
@@ -275,11 +275,11 @@ export async function payment({
   message: string;
 }): Promise<BaseResponse<PaymentResult>> {
   const response = await fetch(PAYMENT, {
-    method: "POST",
+    method: 'POST',
     headers: {
-      "Content-Type": "application/json",
+      'Content-Type': 'application/json',
     },
-    credentials: "include",
+    credentials: 'include',
     body: JSON.stringify({
       nominal,
       campaignId,
@@ -303,11 +303,11 @@ export async function getCampaignDonations({
   slug: string;
 }): Promise<BaseResponse<Donation[]>> {
   const response = await fetch(`${DONATIONS}/${slug}`, {
-    method: "GET",
+    method: 'GET',
     headers: {
-      "Content-Type": "application/json",
+      'Content-Type': 'application/json',
     },
-    credentials: "include",
+    credentials: 'include',
   });
 
   const parsedResponse = await response.json();
@@ -321,11 +321,11 @@ export async function getCampaignDonations({
 
 export async function getNewestDonations(): Promise<BaseResponse<Donation[]>> {
   const response = await fetch(NEWEST_DONATIONS, {
-    method: "GET",
+    method: 'GET',
     headers: {
-      "Content-Type": "application/json",
+      'Content-Type': 'application/json',
     },
-    credentials: "include",
+    credentials: 'include',
   });
 
   const parsedResponse = await response.json();
@@ -339,11 +339,11 @@ export async function getNewestDonations(): Promise<BaseResponse<Donation[]>> {
 
 export async function getUserDonations(): Promise<BaseResponse<UserDonations>> {
   const response = await fetch(USER_DONATIONS, {
-    method: "GET",
+    method: 'GET',
     headers: {
-      "Content-Type": "application/json",
+      'Content-Type': 'application/json',
     },
-    credentials: "include",
+    credentials: 'include',
   });
 
   const parsedResponse = await response.json();
@@ -357,11 +357,11 @@ export async function getUserDonations(): Promise<BaseResponse<UserDonations>> {
 
 export async function getNotification(): Promise<BaseResponse<Notification[]>> {
   const response = await fetch(NOTIFICATION, {
-    method: "GET",
+    method: 'GET',
     headers: {
-      "Content-Type": "application/json",
+      'Content-Type': 'application/json',
     },
-    credentials: "include",
+    credentials: 'include',
   });
 
   const parsedResponse = await response.json();
@@ -374,14 +374,14 @@ export async function getNotification(): Promise<BaseResponse<Notification[]>> {
 }
 
 export async function updateNotification(
-  notificationId: number,
+  notificationId: number
 ): Promise<BaseResponse<UpdateNotification>> {
   const response = await fetch(`${NOTIFICATION}/${notificationId}`, {
-    method: "PATCH",
+    method: 'PATCH',
     headers: {
-      "Content-Type": "application/json",
+      'Content-Type': 'application/json',
     },
-    credentials: "include",
+    credentials: 'include',
   });
 
   const parsedResponse = await response.json();
@@ -395,9 +395,9 @@ export async function updateNotification(
 
 export async function editProfile(formData: FormData) {
   const response = await fetch(EDIT_PROFILE, {
-    method: "PATCH",
+    method: 'PATCH',
     body: formData,
-    credentials: "include",
+    credentials: 'include',
   });
 
   const parsedResponse = await response.json();
@@ -413,11 +413,11 @@ export async function getPaymentHistory(): Promise<
   BaseResponse<PaymentHistory[]>
 > {
   const response = await fetch(PAYMENT_HISTORY, {
-    method: "GET",
+    method: 'GET',
     headers: {
-      "Content-Type": "application/json",
+      'Content-Type': 'application/json',
     },
-    credentials: "include",
+    credentials: 'include',
   });
 
   const parsedResponse = await response.json();

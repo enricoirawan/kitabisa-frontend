@@ -1,16 +1,16 @@
-import { createContext, useContext, useEffect, useState } from "react";
-import { Socket, io } from "socket.io-client";
-import { RequestCookie } from "next/dist/compiled/@edge-runtime/cookies";
+import { createContext, useContext, useEffect, useState } from 'react';
+import { Socket, io } from 'socket.io-client';
+import { RequestCookie } from 'next/dist/compiled/@edge-runtime/cookies';
 
-import getAuthCookie from "./actions/get-auth-cookie";
-import { getQueryClient } from "./query-provider";
+import getAuthCookie from './actions/get-auth-cookie';
+import { getQueryClient } from './query-provider';
 
 import {
   BaseResponse,
   Campaign,
   SocketCampaignUpdated,
-} from "@/common/interfaces";
-import { CAMPAIGN_DETAIL_KEY, NOTIFICATION_KEY } from "@/common/contants";
+} from '@/common/interfaces';
+import { CAMPAIGN_DETAIL_KEY, NOTIFICATION_KEY } from '@/common/contants';
 
 const SocketContext = createContext<Socket | null>(null);
 
@@ -32,7 +32,15 @@ export function SocketProvider({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     const newSocket = io(process.env.NEXT_PUBLIC_BACKEND_URL!, {
-      auth: { Authentication: authCookie },
+      auth: { Authentication: authCookie?.value },
+    });
+
+    newSocket.on('connect', () => {
+      console.log('✅ Socket connected!');
+    });
+
+    newSocket.on('connect_error', (err) => {
+      console.error('❌ Socket connection error:', err.message);
     });
 
     setSocket(newSocket);
@@ -43,7 +51,7 @@ export function SocketProvider({ children }: { children: React.ReactNode }) {
   }, [authCookie]);
 
   useEffect(() => {
-    socket?.on("campaign-updated", async (data: SocketCampaignUpdated) => {
+    socket?.on('campaign-updated', async (data: SocketCampaignUpdated) => {
       queryClient.setQueryData<BaseResponse<Campaign>>(
         [CAMPAIGN_DETAIL_KEY, data.campaignSlug],
         (oldData) => {
@@ -56,11 +64,11 @@ export function SocketProvider({ children }: { children: React.ReactNode }) {
               currentFunding: oldData.data.currentFunding + data.amount,
             },
           };
-        },
+        }
       );
     });
 
-    socket?.on("notification", (message: string) => {
+    socket?.on('notification', (message: string) => {
       // showSuccessToast(message);
       queryClient.invalidateQueries({
         queryKey: [NOTIFICATION_KEY],
